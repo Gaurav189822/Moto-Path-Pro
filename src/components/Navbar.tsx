@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { Bike, LogOut, User } from "lucide-react";
+import { Bike, LogOut, User, Users } from "lucide-react";
 
 interface NavbarProps {
   user?: any;
@@ -45,8 +45,19 @@ const Navbar = ({ user }: NavbarProps) => {
               <Link to="/dashboard">
                 <Button variant="ghost">Dashboard</Button>
               </Link>
+              <Link to="/group-rides">
+                <Button variant="ghost">
+                  <Users className="mr-2 h-4 w-4" />
+                  Group Rides
+                </Button>
+              </Link>
               <Link to="/plan-trip">
                 <Button>Plan Trip</Button>
+              </Link>
+              <Link to="/profile">
+                <Button variant="ghost" size="icon">
+                  <User className="h-5 w-5" />
+                </Button>
               </Link>
               <Button variant="ghost" size="icon" onClick={handleLogout}>
                 <LogOut className="h-5 w-5" />

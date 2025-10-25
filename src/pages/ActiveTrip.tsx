@@ -2,6 +2,9 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import Navbar from "@/components/Navbar";
+import LiveTracking from "@/components/LiveTracking";
+import WeatherWidget from "@/components/WeatherWidget";
+import BookingSection from "@/components/BookingSection";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
@@ -153,61 +156,58 @@ const ActiveTrip = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Navigation className="h-5 w-5 text-primary" />
-                Route Status
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <span className="text-muted-foreground">Status</span>
-                  <span className="font-semibold capitalize">{trip.status}</span>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+          <div className="lg:col-span-2 space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Navigation className="h-5 w-5 text-primary" />
+                  Route Status
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-muted-foreground">Status</span>
+                    <span className="font-semibold capitalize">{trip.status}</span>
+                  </div>
+                  {trip.distance_km && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Distance</span>
+                      <span className="font-semibold">{trip.distance_km} km</span>
+                    </div>
+                  )}
+                  {trip.start_time && (
+                    <div className="flex items-center justify-between">
+                      <span className="text-muted-foreground">Started</span>
+                      <span className="font-semibold">
+                        {new Date(trip.start_time).toLocaleTimeString()}
+                      </span>
+                    </div>
+                  )}
+                  {trip.description && (
+                    <div className="pt-4 border-t">
+                      <p className="text-sm text-muted-foreground">{trip.description}</p>
+                    </div>
+                  )}
+                  {trip.is_group_ride && (
+                    <div className="flex items-center justify-between pt-4 border-t">
+                      <span className="text-muted-foreground">Group Ride</span>
+                      <span className="font-semibold">
+                        {trip.current_riders}/{trip.max_riders} riders
+                      </span>
+                    </div>
+                  )}
                 </div>
-                {trip.distance_km && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Distance</span>
-                    <span className="font-semibold">{trip.distance_km} km</span>
-                  </div>
-                )}
-                {trip.start_time && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Started</span>
-                    <span className="font-semibold">
-                      {new Date(trip.start_time).toLocaleTimeString()}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Clock className="h-5 w-5 text-secondary" />
-                Trip Info
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {trip.description && (
-                  <p className="text-sm text-muted-foreground">{trip.description}</p>
-                )}
-                {trip.is_group_ride && (
-                  <div className="flex items-center justify-between">
-                    <span className="text-muted-foreground">Group Ride</span>
-                    <span className="font-semibold">
-                      {trip.current_riders}/{trip.max_riders} riders
-                    </span>
-                  </div>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+            <LiveTracking tripId={trip.id} isActive={trip.status === "active"} />
+          </div>
+
+          <div className="space-y-6">
+            <WeatherWidget location={trip.start_location} />
+          </div>
         </div>
 
         {/* Mock Map */}
@@ -224,6 +224,14 @@ const ActiveTrip = () => {
             </div>
           </CardContent>
         </Card>
+
+        {/* Booking Section */}
+        {trip.status === "active" && (
+          <div className="mb-8">
+            <h2 className="text-2xl font-bold mb-4">Nearby Amenities</h2>
+            <BookingSection location={trip.start_location} />
+          </div>
+        )}
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4">
