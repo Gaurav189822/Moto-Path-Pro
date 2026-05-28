@@ -13,7 +13,9 @@ Moto Path Pro helps riders plan, organize, and manage bike trips through a moder
 📱 Responsive design for multiple devices
 🧩 Modular and scalable project structure
 🎨 Modern frontend design
+
 🛠️ Tech Stack
+
 Frontend
 React
 TypeScript
@@ -26,6 +28,8 @@ Node.js
 npm
 ESLint
 Git & GitHub
+
+
 📂 Project Structure
 moto-path-pro/
 │
@@ -48,6 +52,8 @@ moto-path-pro/
 ├── .env
 ├── package.json
 └── vite.config.ts
+
+
 ⚙️ Installation & Setup
 1️⃣ Clone the Repository
 git clone https://github.com/yourusername/moto-path-pro.git
@@ -70,6 +76,8 @@ npm run dev
 The application will run at:
 
 http://localhost:5173
+
+
 🧠 Future Enhancements
 AI-based route recommendations
 Weather-aware trip suggestions
